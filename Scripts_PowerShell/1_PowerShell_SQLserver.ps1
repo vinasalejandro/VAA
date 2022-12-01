@@ -49,9 +49,9 @@ Get-History
 
 Get-ExecutionPolicy
 
-Get-ExecutionPolicy Unrestricted    #Permite ejecutar sin restricciones
-Get-ExecutionPolicy RemoteSigned    #Permite ejecutar scripts firmados
-Get-ExecutionPolicy Restricted
+Set-ExecutionPolicy Unrestricted    #Permite ejecutar sin restricciones
+Set-ExecutionPolicy RemoteSigned    #Permite ejecutar scripts firmados
+Set-ExecutionPolicy Restricted
 
 ##########################################################################################################################################
 
@@ -151,4 +151,30 @@ Install-Module -Name SqlServer -AllowClobber
 
 
 
+#####################################################################################################################################################################################33
+
+#ARRANCAR Y DETENER SERVICIOS DE SQL
+
+#Consultar servicios del sistema y la salida en una nueva ventana
+Get-Service | Out-GridView
+
+
+#Consultamos los servicios del sistema que contienen sql (en formato tabla)
+Get-Service | Where-Object{$_.Name-like '*sql*'} | Format-Table -AutoSize
+
+
+#Consultamos los servicios del sistema que contienen sql (con salida en ventana)
+Get-Service | Where-Object{$_.Name-like '*sql*'} | Out-GridView
+
+#Lo mismo pero con alias (? = where-oblect) y ogv = out-GridView)
+
+Get-Service | ?{$_.Name-like '*sql*'} | OGV
+
+#Arrancar el servicio
+
+Start-Service "SQLSERVERAGENT"
+
+#Detener servicio
+
+Stop-Service "SQLSERVERAGENT"
 
