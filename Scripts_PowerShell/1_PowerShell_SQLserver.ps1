@@ -16,7 +16,7 @@ Show-Command
 
 #Ayuda en PS
 
-Get-Help
+Get-Help Get-Service -ShowWindow
 
 Get-Help -Full      
 Get-Help -ShowWindow
@@ -52,7 +52,7 @@ Get-ExecutionPolicy
 Set-ExecutionPolicy Unrestricted    #Permite ejecutar sin restricciones
 Set-ExecutionPolicy RemoteSigned    #Permite ejecutar scripts firmados
 Set-ExecutionPolicy Restricted
-
+Get-Help Set-ExecutionPolicy
 ##########################################################################################################################################
 
 #Manipulando el entorno
