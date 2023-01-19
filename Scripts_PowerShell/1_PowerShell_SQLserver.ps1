@@ -61,7 +61,7 @@ Get-Help Set-ExecutionPolicy
 
 $psISE.Options.DefaultOptions
 
-#Cambia el color de fondo
+#Cambia el color de fondo(script)
 
 $psISE.Options.ScriptPaneBackgroundColor = "green"
 
