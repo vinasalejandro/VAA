@@ -13,8 +13,8 @@ $server = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Server -Argume
 $server.Databases | Select Name, Status, Owner, CreateDate 
 
 
-# Creamos una BD nueva "Prueba"
-$dbName = "prueba2"
+# Creamos una BD nueva "Alquiler_Avionetas_Prueba"
+$dbName = "Alquiler_Avionetas_Prueba"
 $db = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Database($server, $dbName)
 $db.Create()
 
