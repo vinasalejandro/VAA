@@ -158,3 +158,112 @@ SELECT CardNumber,CardNumber_EncryptedbyPassphase
 	AS 'Encrypted card number', CONVERT (NVARCHAR, DECRYPTBYPASSPHRASE (@PassphraseEnteredByUser, CardNumber_EncryptedbyPassphase,1,
 
 
+GO
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--ENCRIPTACION CON CLAVES
+
+USE master
+GO
+
+CREATE LOGIN BankManagerLogin WITH PASSWORD='abc123.'
+GO
+
+CREATE DATABASE MiBanco
+GO
+
+USE MiBanco
+GO
+
+CREATE USER BankManagerUser FOR LOGIN BankManagerLogin
+GO
+
+DROP TABLE IF EXISTS Customers
+GO
+
+CREATE TABLE Customers
+	(customer_id INT PRIMARY KEY,
+	first_name VARCHAR(50) NOT NULL,
+	last_name VARCHAR(50) NOT NULL,
+	social_security_number VARBINARY(100) NOT NULL)
+GO
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON Customers
+TO BankManagerUser
+GO
+
+--creamos la clave simétrica
+
+CREATE SYMMETRIC KEY BankManager_User_Key
+AUTHORIZATION BankManagerUser
+WITH ALGORITHM=AES_256
+ENCRYPTION BY PASSWORD='abc123.'
+GO
+
+
+EXECUTE AS USER ='BankManagerUser'
+GO
+
+PRINT USER
+GO
+
+--abrimos la clave simétrica
+
+OPEN SYMMETRIC KEY BankManager_User_Key
+DECRYPTION BY PASSWORD='abc123.'
+GO
+
+INSERT INTO Customers VALUES (1,'Howard','Stern',
+ENCRYPTBYKEY(KEY_GUID('BankManager_User_Key'),'042-32-1324'))
+INSERT INTO Customers VALUES (2,'Donald','Trump',
+ENCRYPTBYKEY(KEY_GUID('BankManager_User_Key'),'035-13-6564'))
+INSERT INTO Customers VALUES (3,'Bill','Gates',
+ENCRYPTBYKEY(KEY_GUID('BankManager_User_Key'),'533-13-5784'))
+GO
+
+--vemos que aparece el número de seguridad social encriptado
+
+SELECT * FROM Customers
+GO
+
+--cerramos la clave simétrica
+
+CLOSE ALL SYMMETRIC KEYS
+GO
+
+
+
+--vamos a desencriptar
+
+OPEN SYMMETRIC KEY BankManager_User_Key
+DECRYPTION BY PASSWORD='abc123.'
+GO
+
+--vemos que ya podemos ver el numero de seguridad social
+
+SELECT customer_id, first_name + ' ', last_name AS Nombre_Clientes,
+CONVERT (VARCHAR, DECRYPTBYKEY(social_security_number)) AS 'Numero_Seguridad_Social'
+FROM Customers
+GO
+
+CLOSE ALL SYMMETRIC KEYS
+GO
+
+REVERT 
+GO
+
+PRINT USER
+GO
+
