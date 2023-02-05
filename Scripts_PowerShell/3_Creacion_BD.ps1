@@ -12,11 +12,11 @@ New-Item "C:\BD" -itemType Directory
 
 #Creamos la BD desde el script de la ruta
 
-Invoke-SqlCmd -ServerInstance localhost -InputFile C:\scripts\Create_MyDatabase.sql
+Invoke-SqlCmd -ServerInstance localhost -InputFile C:\scripts\CrearBD_Alquiler_Avionetas.sql
 
 #Lanzamos una Query para borrar la BD
 
-Invoke-SqlCmd -ServerInstance localhost -Query "DROP DATABASE MyDatabase"
+Invoke-SqlCmd -ServerInstance localhost -Query "DROP DATABASE Alquiler_Avionetas_Prueba"
 
 ######################################################################################################################################
 
@@ -24,23 +24,23 @@ Invoke-SqlCmd -ServerInstance localhost -Query "DROP DATABASE MyDatabase"
 
 #creamos la variable con el codigo sql
 $sql = "
-CREATE DATABASE [MyDatabase]
+CREATE DATABASE Alquiler_Avionetas_Prueba
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'MyDatabase', FILENAME = N'C:\BD\MyDatabase.mdf' , SIZE = 1048576KB , FILEGROWTH = 262144KB )
+( NAME = N'Alquiler_Avionetas_Prueba', FILENAME = N'C:\BD\Alquiler_Avionetas_Prueba.mdf' , SIZE = 1048576KB , FILEGROWTH = 262144KB )
  LOG ON 
-( NAME = N'MyDatabase_log', FILENAME = N'C:\BD\MyDatabase_log.ldf' , SIZE = 524288KB , FILEGROWTH = 131072KB )
+( NAME = N'Alquiler_Avionetas_Prueba_log', FILENAME = N'C:\BD\Alquiler_Avionetas_Prueba_log.ldf' , SIZE = 524288KB , FILEGROWTH = 131072KB )
 GO
  
 USE [master]
 GO
-ALTER DATABASE [MyDatabase] SET RECOVERY SIMPLE WITH NO_WAIT
+ALTER DATABASE Alquiler_Avionetas_Prueba SET RECOVERY SIMPLE WITH NO_WAIT
 GO
  
-ALTER AUTHORIZATION ON DATABASE::[MyDatabase] TO [sa]
+ALTER AUTHORIZATION ON DATABASE::Alquiler_Avionetas_Prueba TO [sa]
 GO"
 
-Invoke-SqlCmd -ServerInstance localhost -Query $sql
+Invoke-SqlCmd -ServerInstance localhost -Query $sql #en vez de crear una variable podemos poner el código de la query entre comillas en lugar de llamar a la variable
 
 
 #########################################################################################################################
@@ -58,7 +58,7 @@ Install-Module -Name "dbatools"
 #creamos las variables y ejecutamos la creación de la BD con las variables
 
 $SqlInstance = 'localhost'                                                          # SQL Server name 
-$Name = 'MyDatabaseDDATOOLS'                                                        # database name
+$Name = 'Alquiler_Avionetas_Prueba'                                                 # database name
 $DataFilePath = 'C:\BD\'                                                            # data file path
 $LogFilePath = 'C:\BD\'                                                             # log file path
 $Recoverymodel = 'Simple'                                                           # recovery model
@@ -77,6 +77,6 @@ Get-DbaDatabase -SqlInstance $SqlInstance -Database $Name
 
 #Eliminamos la BD
 
-Invoke-SqlCmd -ServerInstance localhost -Query "DROP DATABASE MyDatabaseDDATOOLS"
+Invoke-SqlCmd -ServerInstance localhost -Query "DROP DATABASE Alquiler_Avionetas_Prueba"
 
 
