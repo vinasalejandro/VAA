@@ -7,10 +7,10 @@ Import-Module SQLSERVER
 $instanceName = "localhost"
 $server = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Server -ArgumentList $instanceName
 
-$dbName = "TestDB" #Nombre de la BD que queramos borrar 
+$dbName = "Alquiler_Avionetas_Prueba" #Nombre de la BD que queramos borrar 
 
 #need to check if database exists, and if it does, drop it
-$db = $server.Databases[$dbName]
+$db = $server.Databases[$dbname]
 if ($db)
 {
       #we will use KillDatabase instead of Drop
