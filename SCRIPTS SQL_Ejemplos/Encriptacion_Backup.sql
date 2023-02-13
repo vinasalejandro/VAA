@@ -2,7 +2,7 @@
 --ENCRIPTACIÓN DE BACKUP
 
 
---PRIMER SERVIDOR
+--PRIMER SERVIDOR (source)
 
 USE master
 GO
@@ -93,14 +93,54 @@ BACKUP CERTIFICATE MyServerCert
 GO
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---SEGUNDO SERVIDOR
+--SEGUNDO SERVIDOR en 
 
 RESTORE DATABASE testBackup
 	FROM DISK = 'C:\temp\testBackup.bak'
 	WITH FILE = 1, NOUNLOAD, STATS = 5,
 	MOVE N'testBackup' TO 'C:\test',
 	MOVE N'testBackup_log' TO 'C:\test'
+GO
+
+
+-- Restaurando Certificado en el 2 Servidor
+--(PRUEBA1)
+CREATE CERTIFICATE MyServerCert5  
+    FROM FILE = 'C:\temp3\YHCert'
+     WITH PRIVATE KEY 
+      ( 
+        FILE = 'C:\temp3\YHCert.pvk' ,
+        DECRYPTION BY PASSWORD = 'abcd1234.' 
+      ) 
+GO
+ 
+ --restauramos la bd
+
+RESTORE DATABASE YHtest 
+    FROM  DISK = 'C:\temp3\YHtest.bak' 
+    WITH  FILE = 1,  NOUNLOAD,  STATS = 5
+GO
+
+---------------------------------------------------------
+--(PRUEBA2)
+
+CREATE CERTIFICATE MyServerCert3  
+    FROM FILE = 'C:\temp2\MyServerCert'
+     WITH PRIVATE KEY 
+      ( 
+        FILE = 'C:\temp2\MyServerCert.pvk' ,
+        DECRYPTION BY PASSWORD = 'abcd1234.' 
+      ) 
+GO
+ 
+ --restauramos la bd
+
+RESTORE DATABASE ENCRIPTBACKUP
+    FROM  DISK = 'C:\temp2\ENCRIPTBACKUP.bak' 
+    WITH  FILE = 1,  NOUNLOAD,  STATS = 5
 GO
 
 
