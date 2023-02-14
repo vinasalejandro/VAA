@@ -81,3 +81,43 @@ Write-Host
 $dr.Close()
 $con.Close()
 
+
+
+
+#Ejemplo con la Alquiler_Avionetas (tabla clientes, muestra DNI y nombre)
+
+
+
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=.; Database=Alquiler_Avionetas;   Integrated Security=true"
+$con.open()
+
+
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.CommandText = "SELECT TOP 10 nombre, DNI FROM dbo.cliente"
+$cmd.Connection = $con
+
+
+$dr = $cmd.ExecuteReader()
+
+Write-Host
+
+If ($dr.HasRows)
+{
+  Write-Host Number of fields: $dr.FieldCount
+  Write-Host
+  While ($dr.Read())
+  {
+    Write-Host $dr["Nombre"] $dr["DNI"]
+  }
+}
+Else
+{
+  Write-Host The DataReader contains no rows.
+}
+
+Write-Host
+
+
+$dr.Close()
+$con.Close()

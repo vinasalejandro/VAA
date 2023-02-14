@@ -3,7 +3,7 @@
 
 # Almacena los BACKUPS en C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup
 
-Backup-SqlDatabase -ServerInstance "localhost" -Database "Pubs"
+Backup-SqlDatabase -ServerInstance "localhost" -Database "Alquiler_Avionetas"
 
 
 
@@ -13,10 +13,10 @@ Backup-SqlDatabase -ServerInstance "localhost" -Database "Pubs"
 
 $dt = Get-Date -Format yyyyMMddHHmmss
 $instancename = "localhost"
-$dbname = 'Trasteros'
+$dbname = 'Alquiler_Avionetas'
 Backup-SqlDatabase -Serverinstance $instancename -Database $dbname -BackupFile "c:\BACKUP\$($dbname)_db_$($dt).bak"
 
-Trasteros_db_20221205204130.bak
+
 
 ###############################    RESTORE  #############################
 
@@ -24,64 +24,13 @@ Trasteros_db_20221205204130.bak
 
 Invoke-Sqlcmd -Serverinstance localhost -Database Pubs -Query 'Alter Database Pubs SET SINGLE_USER WITH ROLLBACK IMMEDIATE;'
 
-#borrar Pubs
-Restart-Service "MSSQLSERVER" -Force
+#borrar Alquiler_Avionetas
 
-Invoke-Sqlcmd -Serverinstance localhost -Query "Drop database Trasteros;"
+Invoke-Sqlcmd -Serverinstance localhost -Query "Drop database Alquiler_Avionetas;"
 
 #restore
-Restore-Sqldatabase -Serverinstance $instancename -Database $dbname -Backupfile "C:\BACKUP\Trasteros_db_20221205204130.bak" -replacedatabase
+Restore-Sqldatabase -Serverinstance $instancename -Database $dbname -Backupfile "C:\BACKUP\Alquiler_Avionetas_db_20230214202035.bak" -replacedatabase
 
 #fin restore
-
-
-
-
-##############################  INVOKE   ###############################
- 
-
-## Ejecuta comandos en equipos locales y remotos.
-Invoke-Sqlcmd -Query "SELECT GETDATE() AS ATimeofQuery" -ServerInstance "."
-
-Invoke-Sqlcmd -Query "SELECT COUNT(*) AS Count FROM Authors" -Database "Pubs"
--ConnecionString "Data Source=.;Initial Catalog=Pubs;Integrated Security=True;ApplicationIntent=ReadOnly" 
-
-Invoke-Sqlcmd -Query "SELECT * FROM Alta_Alquiler" -Database Trasteros |ogv
-
-
-
-# Ejecutar SQL(CREAR BASE DE DATOS) con Invoke-SqlCmd
-Invoke-SqlCmd -ServerInstance localhost -InputFile "C:\DATABASES_EXAMPLES\Create_MyDatabase.sql"
-
-
-
-
-
-
-#################################  FUNCIONES ######################################
-
-
-# EJEMPLO FUNCION EN PS
-
-#CREAMOS UNA FUNCION PARA OBTENER EL USUARIO ACTUAL
-
-Function UsuarioActual
-    { [System.Security.Principal.windowsIdentity]::GetCurrent().Name }
-
-# EJECUTAMOS LA FUNCION
-UsuarioActual
-
-DESKTOP-4BR36G5\OMV
-
-
-
-# Vamos a obtener las bases de datos de dos formas diferentes
-
-# Con una select de los nombres de las bases de datos
-invoke-sqlcmd -serverinstance "localhost" -database master -Query "SELECT name From Sys.databases" | ogv
-
-
-# Utilizamos un procedimiento almacenado
-invoke-sqlcmd -serverinstance "." -database master -Query "EXEC sp_databases" | ogv
 
 
