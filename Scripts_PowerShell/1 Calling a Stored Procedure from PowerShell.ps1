@@ -2,24 +2,24 @@
 
 #Usamos para crear el procedimieto el .sql con el mismo nombre
 
-Invoke-Sqlcmd -ServerInstance localhost -Database TEMPDB -Query "CustomerSales" ##Ejecuta el procedimiento almacenado "CustomerSales"
+Invoke-Sqlcmd -ServerInstance localhost -Database Alquiler_Avionetas -Query "Precio_total" ##Ejecuta el procedimiento almacenado "Precio_total"
 
 
 
-$results = Invoke-Sqlcmd -ServerInstance localhost -Database tempdb -Query "CustomerSales"
-foreach ($sale in $results) {Write-Host("Customer: " + $sale.CustomerID + ", TotalSale:$" +$sale.totalsale)}
+#$results = Invoke-Sqlcmd -ServerInstance localhost -Database tempdb -Query "CustomerSales"
+#foreach ($sale in $results) {Write-Host("Customer: " + $sale.CustomerID + ", TotalSale:$" +$sale.totalsale)}
 
 
 #Guarda el resultado del procedimiento en un fichero
-$results = Invoke-Sqlcmd -ServerInstance localhost -Database tempdb -Query "CustomerSales"
-$results | Select-Object CustomerID, totalsale | out-file c:\procesos.txt
-notepad c:\procesos.txt
+$results = Invoke-Sqlcmd -ServerInstance localhost -Database Alquiler_avionetas -Query "Precio_total"
+$results | Select-Object ID_cliente, Precio_total | out-file c:\precio.txt
+notepad c:\precio.txt
 
 #Guarda en resultado del procedimieto en un .csv
-$results = Invoke-Sqlcmd -ServerInstance localhost -Database tempdb -Query "CustomerSales"
-$results | Select-Object CustomerID, totalsale | Export-Csv -Path "c:\sales.csv" -NoTypeInformation
+$results = Invoke-Sqlcmd -ServerInstance localhost -Database Alquiler_Avionetas -Query "Precio_total"
+$results | Select-Object ID_cliente, Precio_total | Export-Csv -Path "c:\precio.csv" -NoTypeInformation
 
-notepad c:\sales.csv
+notepad c:\precio.csv
 
 
 ###############
