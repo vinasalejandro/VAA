@@ -61,7 +61,7 @@ GO
 
 INSERT INTO dbo.avionetas(Nombre,Contenido,EXTENSION)
 SELECT 'Avioneta2', BULKCOLUMN,'JPG'
-FROM OPENROWSET (BULK N'C:\Imagenes\Avioneta1.jpg', SINGLE_BLOB) AS DOCUMENT
+FROM OPENROWSET (BULK N'C:\Imagenes\Avioneta2.jpg', SINGLE_BLOB) AS DOCUMENT
 GO
 
 
@@ -104,9 +104,9 @@ ALTER DATABASE PruebaFS
 	CONTAINS FILESTREAM
 GO
 
-ALTER DATABASE PruebaFS
+ALTER DATABASE Alquiler_Avionetas
 	ADD FILE (
-		NAME = 'MyDatabase_filestream',
+		NAME = 'Alquiler_Avionetas_filestream',
 		FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\FILESTREAM'
 		)
 		TO FILEGROUP [PRIMARY_FILESTREAM]
