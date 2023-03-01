@@ -33,8 +33,6 @@ SELECT * FROM dbo.documentos
 GO
 
 
-
-
 --ejemplo con la bd del proyecto
 
 USE Alquiler_Avionetas
