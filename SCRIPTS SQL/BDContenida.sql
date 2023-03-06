@@ -30,16 +30,16 @@ GO
 
 --Hasta aqui preparamos el entorno para lo que vamos a ejecutar
 
-DROP DATABASE IF EXISTS Contenida
+DROP DATABASE IF EXISTS Alquiler_Avionetas_Contenida
 GO
 
-CREATE DATABASE Contenida
+CREATE DATABASE Alquiler_Avionetas_Contenida
 CONTAINMENT=PARTIAL
 GO
 
 --una vez creada la activamos
 
-USE Contenida
+USE Alquiler_Avionetas_Contenida
 GO
 
 --Creo el usuario VAA, asocio esquena dbo
@@ -73,11 +73,11 @@ GO
 
 --desde vaa creamos una tabla
 
-CREATE TABLE dbo.TablaContenida
+CREATE TABLE dbo.TablaAvionetasContenida
 	(Codigo NCHAR(10) NULL,
 	Nombre NCHAR(10) NULL
 	) ON [PRIMARY]
 GO
 
-
-
+select * from TablaAvionetasContenida
+go
