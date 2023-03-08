@@ -91,7 +91,7 @@ Go
 ----------------
 -- METADATA INFORMATION
 
-SELECT *,$Partition.Fecha_Alquiler(fecha_alquiler) AS Partition
+SELECT *,$Partition.Fecha_Alquiler(fecha_alquiler) AS Partición
 FROM Fechas_Alquiler
 GO
 
@@ -184,164 +184,102 @@ GO
 --dbo.Fechas_Alquiler	3	Fechas_2017	0	0	less than	NULL	0:0
 --------------------
 
-----------------------------------------------------------------------------------------------------------------------------------------HASTA AQUI---------------------------------------------------------------------------------------------------
 
-INSERT INTO Alta_Coleg 
-	VALUES ('Ismael','Cabana','2017-05-21'), 
-	('Alejandra','Martinez','2017-07-09'), 
-	('Alfonso','Verdes','2017-09-12')
+INSERT INTO Fechas_Alquiler
+	VALUES ('Jorge','Rodríguez','2017-05-21'), 
+	('Pedro','Sanchez','2017-07-09'), 
+	('Mariano','Rajoy','2017-09-12')
 GO
 
 --(3 rows affected)
 
-SELECT *,$Partition.FN_altas_fecha(fecha_alta) 
-FROM Alta_Coleg
+SELECT *,$Partition.Fecha_Alquiler(fecha_alquiler) AS Partición
+FROM Fechas_Alquiler
 GO
 
 
---id_alta	nombre	apellido	fecha_alta	(No column name)
---1	Antonio	Ruiz	2015-01-01 00:00:00.000	1
---2	Lucas	García	2015-05-05 00:00:00.000	1
---3	Manuel	Sanchez	2015-08-11 00:00:00.000	1
---4	Laura	Muñoz	2016-06-23 00:00:00.000	2
---5	Rosa Maria	Leandro	2016-02-03 00:00:00.000	2
---6	Federico	Ramos	2016-04-06 00:00:00.000	2
---7	Ismael	Cabana	2017-05-21 00:00:00.000	3
---8	Alejandra	Martinez	2017-07-09 00:00:00.000	3
---9	Alfonso	Verdes	2017-09-12 00:00:00.000	3
-
-
-select name, create_date, value from sys.partition_functions f 
-inner join sys.partition_range_values rv 
-on f.function_id=rv.function_id 
-where f.name = 'FN_altas_fecha'
-gO
 
 
 select p.partition_number, p.rows from sys.partitions p 
 inner join sys.tables t 
-on p.object_id=t.object_id and t.name = 'Alta_Coleg' 
-GO
-
-DECLARE @TableName NVARCHAR(200) = N'Alta_Coleg' 
-SELECT SCHEMA_NAME(o.schema_id) + '.' + OBJECT_NAME(i.object_id) AS [object] , p.partition_number AS [p#] , fg.name AS [filegroup] , p.rows , au.total_pages AS pages , CASE boundary_value_on_right WHEN 1 THEN 'less than' ELSE 'less than or equal to' END as comparison , rv.value , CONVERT (VARCHAR(6), CONVERT (INT, SUBSTRING (au.first_page, 6, 1) + SUBSTRING (au.first_page, 5, 1))) + ':' + CONVERT (VARCHAR(20), CONVERT (INT, SUBSTRING (au.first_page, 4, 1) + SUBSTRING (au.first_page, 3, 1) + SUBSTRING (au.first_page, 2, 1) + SUBSTRING (au.first_page, 1, 1))) AS first_page FROM sys.partitions p INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id INNER JOIN sys.objects o
-ON p.object_id = o.object_id INNER JOIN sys.system_internals_allocation_units au ON p.partition_id = au.container_id INNER JOIN sys.partition_schemes ps ON ps.data_space_id = i.data_space_id INNER JOIN sys.partition_functions f ON f.function_id = ps.function_id INNER JOIN sys.destination_data_spaces dds ON dds.partition_scheme_id = ps.data_space_id AND dds.destination_id = p.partition_number INNER JOIN sys.filegroups fg ON dds.data_space_id = fg.data_space_id LEFT OUTER JOIN sys.partition_range_values rv ON f.function_id = rv.function_id AND p.partition_number = rv.boundary_id WHERE i.index_id < 2 AND o.object_id = OBJECT_ID(@TableName);
-GO
-
---object	p#	filegroup	rows	pages	comparison	value	first_page
---dbo.Alta_Coleg	1	FG_Archivo	3	9	less than	2016-01-01 00:00:00.000	3:8
---dbo.Alta_Coleg	2	FG_2016	3	9	less than	2017-01-01 00:00:00.000	4:8
---dbo.Alta_Coleg	3	FG_2017	3	9	less than	NULL	5:8
-
-------------------
-
-
-INSERT INTO Alta_Coleg 
-	VALUES ('Amanda','Smith','2018-02-12'), 
-	('Adolfo','Muñiz','2018-01-23'), 
-	('Rosario','Fuertes','2018-02-23')
+on p.object_id=t.object_id and t.name = 'Fechas_Alquiler' 
 GO
 
 
 
-SELECT *,$Partition.FN_altas_fecha(fecha_alta) as PARTITION
-FROM Alta_Coleg
+
+
+
+INSERT INTO Fechas_Alquiler
+	VALUES ('Cristiano','Ronaldo','2018-02-12'), 
+	('Juan Carlos','Valeron','2018-01-23'), 
+	('Lucas','Vazquez','2018-02-23')
 GO
 
---id_alta	nombre	apellido	fecha_alta	PARTITION
---1	Antonio	Ruiz	2015-01-01 00:00:00.000	1
---2	Lucas	García	2015-05-05 00:00:00.000	1
---3	Manuel	Sanchez	2015-08-11 00:00:00.000	1
---4	Laura	Muñoz	2016-06-23 00:00:00.000	2
---5	Rosa Maria	Leandro	2016-02-03 00:00:00.000	2
---6	Federico	Ramos	2016-04-06 00:00:00.000	2
---7	Ismael	Cabana	2017-05-21 00:00:00.000	3
---8	Alejandra	Martinez	2017-07-09 00:00:00.000	3
---9	Alfonso	Verdes	2017-09-12 00:00:00.000	3
---10	Amanda	Smith	2018-02-12 00:00:00.000	3
---11	Adolfo	Muñiz	2018-01-23 00:00:00.000	3
---12	Rosario	Fuertes	2018-02-23 00:00:00.000	3
 
-select name, create_date, value from sys.partition_functions f 
-inner join sys.partition_range_values rv 
-on f.function_id=rv.function_id 
-where f.name = 'FN_altas_fecha'
-gO
 
+
+SELECT *,$Partition.Fecha_Alquiler(fecha_alquiler) AS Partición
+FROM Fechas_Alquiler
+GO
 
 select p.partition_number, p.rows from sys.partitions p 
 inner join sys.tables t 
-on p.object_id=t.object_id and t.name = 'Alta_Coleg' 
+on p.object_id=t.object_id and t.name = 'Fechas_Alquiler' 
 GO
 
-DECLARE @TableName NVARCHAR(200) = N'Alta_Coleg' 
-SELECT SCHEMA_NAME(o.schema_id) + '.' + OBJECT_NAME(i.object_id) AS [object] , p.partition_number AS [p#] , fg.name AS [filegroup] , p.rows , au.total_pages AS pages , CASE boundary_value_on_right WHEN 1 THEN 'less than' ELSE 'less than or equal to' END as comparison , rv.value , CONVERT (VARCHAR(6), CONVERT (INT, SUBSTRING (au.first_page, 6, 1) + SUBSTRING (au.first_page, 5, 1))) + ':' + CONVERT (VARCHAR(20), CONVERT (INT, SUBSTRING (au.first_page, 4, 1) + SUBSTRING (au.first_page, 3, 1) + SUBSTRING (au.first_page, 2, 1) + SUBSTRING (au.first_page, 1, 1))) AS first_page FROM sys.partitions p INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id INNER JOIN sys.objects o
-ON p.object_id = o.object_id INNER JOIN sys.system_internals_allocation_units au ON p.partition_id = au.container_id INNER JOIN sys.partition_schemes ps ON ps.data_space_id = i.data_space_id INNER JOIN sys.partition_functions f ON f.function_id = ps.function_id INNER JOIN sys.destination_data_spaces dds ON dds.partition_scheme_id = ps.data_space_id AND dds.destination_id = p.partition_number INNER JOIN sys.filegroups fg ON dds.data_space_id = fg.data_space_id LEFT OUTER JOIN sys.partition_range_values rv ON f.function_id = rv.function_id AND p.partition_number = rv.boundary_id WHERE i.index_id < 2 AND o.object_id = OBJECT_ID(@TableName);
-GO
+
+
+
+
 
 --NO SALEN EN LA PARTICIÓN DE 2018 YA QUE NO SE AÑADIÓ UN INERVALO DE FECHAS EN ESA PARTICIÓN
 
---object	p#	filegroup	rows	pages	comparison	value	first_page
---dbo.Alta_Coleg	1	FG_Archivo	3	9	less than	2016-01-01 00:00:00.000	3:8
---dbo.Alta_Coleg	2	FG_2016		3	9	less than	2017-01-01 00:00:00.000	4:8
---dbo.Alta_Coleg	3	FG_2017		6	9	less than	NULL	5:8
+
+
 
 -- PARTITIONS OPERATIONS
 
 -- SPLIT
 
 
-ALTER PARTITION FUNCTION FN_altas_fecha() 
+ALTER PARTITION FUNCTION Fecha_Alquiler() 
 	SPLIT RANGE ('2018-01-01'); 
 GO
 
-SELECT *,$Partition.FN_altas_fecha(fecha_alta) as PARTITION
-FROM Alta_Coleg
+
+SELECT *,$Partition.Fecha_Alquiler(fecha_alquiler) AS Partición
+FROM Fechas_Alquiler
 GO
 
-DECLARE @TableName NVARCHAR(200) = N'Alta_Coleg' 
-SELECT SCHEMA_NAME(o.schema_id) + '.' + OBJECT_NAME(i.object_id) AS [object] , p.partition_number AS [p#] , fg.name AS [filegroup] , p.rows , au.total_pages AS pages , CASE boundary_value_on_right WHEN 1 THEN 'less than' ELSE 'less than or equal to' END as comparison , rv.value , CONVERT (VARCHAR(6), CONVERT (INT, SUBSTRING (au.first_page, 6, 1) + SUBSTRING (au.first_page, 5, 1))) + ':' + CONVERT (VARCHAR(20), CONVERT (INT, SUBSTRING (au.first_page, 4, 1) + SUBSTRING (au.first_page, 3, 1) + SUBSTRING (au.first_page, 2, 1) + SUBSTRING (au.first_page, 1, 1))) AS first_page FROM sys.partitions p INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id INNER JOIN sys.objects o
-ON p.object_id = o.object_id INNER JOIN sys.system_internals_allocation_units au ON p.partition_id = au.container_id INNER JOIN sys.partition_schemes ps ON ps.data_space_id = i.data_space_id INNER JOIN sys.partition_functions f ON f.function_id = ps.function_id INNER JOIN sys.destination_data_spaces dds ON dds.partition_scheme_id = ps.data_space_id AND dds.destination_id = p.partition_number INNER JOIN sys.filegroups fg ON dds.data_space_id = fg.data_space_id LEFT OUTER JOIN sys.partition_range_values rv ON f.function_id = rv.function_id AND p.partition_number = rv.boundary_id WHERE i.index_id < 2 AND o.object_id = OBJECT_ID(@TableName);
-GO
+
 --SE REPARTEN AUTOMATICAMENTE
---object			p#	filegroup	rows	pages	comparison	value	first_page
---dbo.Alta_Coleg	1	FG_Archivo	3	9	less than	2016-01-01 00:00:00.000	3:8
---dbo.Alta_Coleg	2	FG_2016		3	9	less than	2017-01-01 00:00:00.000	4:8
---dbo.Alta_Coleg	3	FG_2017		3	9	less than	2018-01-01 00:00:00.000	5:8
---dbo.Alta_Coleg	4	FG_2018		3	9	less than	NULL	6:8
 
 -- MERGE
 
-ALTER PARTITION FUNCTION FN_Altas_Fecha ()
+ALTER PARTITION FUNCTION Fecha_Alquiler ()
  MERGE RANGE ('2016-01-01'); 
  GO
 
-SELECT *,$Partition.FN_altas_fecha(fecha_alta) 
-FROM Alta_Coleg
+
+SELECT *,$Partition.Fecha_Alquiler(fecha_alquiler) AS Partición
+FROM Fechas_Alquiler
 GO
-DECLARE @TableName NVARCHAR(200) = N'Alta_Coleg' 
-SELECT SCHEMA_NAME(o.schema_id) + '.' + OBJECT_NAME(i.object_id) AS [object] , p.partition_number AS [p#] , fg.name AS [filegroup] , p.rows , au.total_pages AS pages , CASE boundary_value_on_right WHEN 1 THEN 'less than' ELSE 'less than or equal to' END as comparison , rv.value , CONVERT (VARCHAR(6), CONVERT (INT, SUBSTRING (au.first_page, 6, 1) + SUBSTRING (au.first_page, 5, 1))) + ':' + CONVERT (VARCHAR(20), CONVERT (INT, SUBSTRING (au.first_page, 4, 1) + SUBSTRING (au.first_page, 3, 1) + SUBSTRING (au.first_page, 2, 1) + SUBSTRING (au.first_page, 1, 1))) AS first_page FROM sys.partitions p INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id INNER JOIN sys.objects o
-ON p.object_id = o.object_id INNER JOIN sys.system_internals_allocation_units au ON p.partition_id = au.container_id INNER JOIN sys.partition_schemes ps ON ps.data_space_id = i.data_space_id INNER JOIN sys.partition_functions f ON f.function_id = ps.function_id INNER JOIN sys.destination_data_spaces dds ON dds.partition_scheme_id = ps.data_space_id AND dds.destination_id = p.partition_number INNER JOIN sys.filegroups fg ON dds.data_space_id = fg.data_space_id LEFT OUTER JOIN sys.partition_range_values rv ON f.function_id = rv.function_id AND p.partition_number = rv.boundary_id WHERE i.index_id < 2 AND o.object_id = OBJECT_ID(@TableName);
-GO
+
 --FUSIONA DOS PARTICIONES
---object			p#	filegroup	rows	pages	comparison	value	first_page
---dbo.Alta_Coleg	1	FG_Archivo	6	9	less than	2017-01-01 00:00:00.000	3:8
---dbo.Alta_Coleg	2	FG_2017		3	9	less than	2018-01-01 00:00:00.000	5:8
---dbo.Alta_Coleg	3	FG_2018		3	9	less than	NULL	6:8
+
 
 -- Example SWITCH
 
 USE master
 GO
-ALTER DATABASE [Colegio_Medico] REMOVE FILE Altas_2016
+ALTER DATABASE Alquiler_Avionetas REMOVE FILE Fechas_2016
 go
 
-ALTER DATABASE [Colegio_Medico] REMOVE FILEGROUP FG_2016 
+ALTER DATABASE [Alquiler_Avionetas] REMOVE FILEGROUP Fechas_2016
 GO
 
 
---The file 'Altas_2016' has been removed.
---The filegroup 'FG_2016' has been removed.
 
 select * from sys.filegroups
 GO
@@ -349,10 +287,11 @@ GO
 select * from sys.database_files
 GO
 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- SWITCH
 
-USE Colegio_Medico
+USE Alquiler_Avionetas
 go
 
 SELECT *,$Partition.FN_altas_fecha(fecha_alta) 

@@ -271,7 +271,7 @@ GO
 
 --(3 rows affected)
 
-SELECT *,$Partition.FN_altas_fecha(fecha_alta) 
+SELECT *,$Partition.FN_altas_fecha(fecha_alta) as Particion
 FROM Alta_Coleg
 GO
 
