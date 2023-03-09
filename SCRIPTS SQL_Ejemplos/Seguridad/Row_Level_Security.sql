@@ -63,7 +63,7 @@ WITH SCHEMABINDING
 AS
 	RETURN SELECT 1 AS fn_SecureCustomerData
 	--filter our records based in database user name
-	WHERE @FilterColumnName = user_name(); --muestra solo los datos del usuario activo
+	WHERE @FilterColumnName = user_name() --OR user_name()= 'dbo'; --muestra solo los datos del usuario activo (si añadimos a dbo el dbo tambien podria ver los datos)
 GO
 
 
@@ -74,6 +74,14 @@ GO
 
 select * from Customer
 GO
+
+
+--para borrar la politica de seguridad
+--drop security policy filterCustomer
+--go
+
+
+--activamos la politica de seguridad
 
 CREATE SECURITY POLICY FilterCustomer
 ADD FILTER PREDICATE dbo.fn_RowLevelSecurity(SalesPersonUserName)
@@ -259,3 +267,7 @@ GO
 
 DELETE FROM Customer WHERE CustomerName = 'Star Brite'
 GO
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
