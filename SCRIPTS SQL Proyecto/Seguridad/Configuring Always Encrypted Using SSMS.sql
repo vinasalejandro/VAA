@@ -65,29 +65,26 @@
 
 ----------------------------------------------
 
-DROP DATABASE IF EXISTS School
+USE Alquiler_Avionetas
 GO
-CREATE DATABASE School
+
+DROP TABLE IF EXISTS Acceso_Piloto
 GO
-Use School
-GO
-DROP TABLE IF EXISTS Student
-GO
-CREATE TABLE Student  
+CREATE TABLE Acceso_Piloto 
 (  
-   StudentId int identity(1,1) primary key,  
-   Name varchar(100),  
+   Id_Piloto int identity(1,1) primary key,  
+   Nombre varchar(100),  
    Password varchar(100) COLLATE Latin1_General_BIN2 not null,  
-   SSN varchar(20)  COLLATE Latin1_General_BIN2 not null
+   Num_Licencia_Vuelo varchar(20)  COLLATE Latin1_General_BIN2 not null
 )
 GO
 
-insert into Student ( Name, Password, SSN)
-VALUES ('John','abc123', '451236521478'),
-		('Mike','xyz123', '789541239654')
+insert into Acceso_Piloto( Nombre, Password, Num_Licencia_Vuelo)
+VALUES ('Helena','abc123', '451236521478'),
+		('Juan','xyz123', '789541239654')
 GO
 
-SELECT * FROM Student
+SELECT * FROM Acceso_Piloto
 GO
 
 -- Let’s now configure SSMS for to enable Always Encrypted. 
@@ -132,7 +129,7 @@ GO
 
 -- COMPROBACIÓN
 
-SELECT * FROM Student
+SELECT * FROM Acceso_Piloto
 go
 
 --StudentId	Name	Password												SSN
@@ -170,9 +167,8 @@ go
 
 -- Column Encryption Setting = Enabled
 
-USE [School]
-GO
-SELECT * FROM Student
+
+SELECT * FROM Acceso_Piloto
 go
 
 -- NOTA:
@@ -185,8 +181,3 @@ go
 --StudentId	Name	Password		SSN
 --1			John	abc123		451236521478
 --2			Mike	xyz123		789541239654
-
-
-
-
-
